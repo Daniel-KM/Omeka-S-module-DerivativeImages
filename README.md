@@ -2,18 +2,18 @@ Derivative Images (module for Omeka S)
 ======================================
 
 [Derivative Images] is a module for [Omeka S] that allows to recreate all
-derivative files from the original, it they are still available. It is useful
-when you change the parameters of the thumbnails, for example bigger or lower
-size, or when you add a new derivative type.
+derivative files from the original media, if they are still available. It is
+useful when you change the parameters of the thumbnails, for example bigger or
+lower size, or when you add a new derivative type.
 
-This is a full rewrite of the [plugin Derivative images] for [Omeka Classic] of
+It is a full rewrite of the [plugin Derivative images] for [Omeka Classic] of
 the Roy Rosenzweig Center for History and New Media.
 
 
 Installation
 ------------
 
-Uncompress files and rename plugin folder `Derivative Images`.
+Uncompress files and rename plugin folder `DerivativeImages`.
 
 See general end user documentation for [Installing a module] and follow the
 config instructions.
