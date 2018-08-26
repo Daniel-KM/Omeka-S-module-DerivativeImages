@@ -72,7 +72,7 @@ class DerivativeImages extends AbstractJob
                         'The job "Derivative Images" was stopped: %d/%d resources processed.', // @translate
                         $offset + $key, $totalMedias
                     ));
-                    break;
+                    break 2;
                 }
 
                 // TODO Manage creation of thumbnails for media without original (youtube…).
