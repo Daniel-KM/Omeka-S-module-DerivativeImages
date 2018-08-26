@@ -67,7 +67,7 @@ class Module extends AbstractModule
             . '</p>';
         $html .= $renderer->formCollection($form);
         $html .= '<p>'
-            . $translator->translate('When the process is ended (check the job log), the module can be uninstalled.', // @translate'
+            . $translator->translate('When the process is ended (check the job log), the module can be uninstalled.') // @translate'
             . '</p>';
         return $html;
     }
