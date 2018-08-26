@@ -97,7 +97,7 @@ class DerivativeImages extends AbstractJob
                 if (!file_exists($sourcePath)) {
                     $logger->warn(new Message(
                         'Media #%d (%d/%d): the original file "%s" does not exist.', // @translate
-                        $media->getId(), $offset + $key, $totalMedias, $filename
+                        $media->getId(), $offset + $key + 1, $totalMedias, $filename
                     ));
                     continue;
                 }
@@ -105,7 +105,7 @@ class DerivativeImages extends AbstractJob
                 if (!is_readable($sourcePath)) {
                     $logger->warn(new Message(
                         'Media #%d (%d/%d): the original file "%s" is not readable.', // @translate
-                        $media->getId(), $offset + $key, $totalMedias, $filename
+                        $media->getId(), $offset + $key + 1, $totalMedias, $filename
                     ));
                     continue;
                 }
@@ -116,7 +116,7 @@ class DerivativeImages extends AbstractJob
                     if (file_exists($derivativePath) && !is_writeable($derivativePath)) {
                         $logger->warn(new Message(
                             'Media #%d (%d/%d): derivative file "%s" is not writeable (type "%s").', // @translate
-                            $media->getId(), $offset + $key, $totalMedias, $filename, $type
+                            $media->getId(), $offset + $key + 1, $totalMedias, $filename, $type
                         ));
                         continue 2;
                     }
@@ -126,7 +126,7 @@ class DerivativeImages extends AbstractJob
 
                 $logger->info(new Message(
                     'Media #%d (%d/%d): creating derivative files.', // @translate
-                    $media->getId(), $offset + $key, $totalMedias
+                    $media->getId(), $offset + $key + 1, $totalMedias
                 ));
 
                 $tempFile = $tempFileFactory->build();
@@ -144,13 +144,13 @@ class DerivativeImages extends AbstractJob
                     ++$totalSucceed;
                     $logger->info(new Message(
                         'Media #%d (%d/%d): derivative files created.', // @translate
-                        $media->getId(), $offset + $key, $totalMedias
+                        $media->getId(), $offset + $key + 1, $totalMedias
                     ));
                 } else {
                     ++$totalFailed;
                     $logger->notice(new Message(
                         'Media #%d (%d/%d): derivative files not created.', // @translate
-                        $media->getId(), $offset + $key, $totalMedias
+                        $media->getId(), $offset + $key + 1, $totalMedias
                     ));
                 }
             }
