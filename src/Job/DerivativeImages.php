@@ -155,6 +155,7 @@ class DerivativeImages extends AbstractJob
                 }
             }
 
+            $entityManager->clear();
             $offset += self::SQL_LIMIT;
         }
 
