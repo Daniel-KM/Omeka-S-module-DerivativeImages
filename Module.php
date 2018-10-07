@@ -87,20 +87,26 @@ class Module extends AbstractModule
         }
 
         $params = $form->getData();
-        if ($params['derivativeimages_process']) {
-            unset($params['csrf']);
-            $dispatcher = $services->get('Omeka\Job\Dispatcher');
-            $job = $dispatcher->dispatch(\DerivativeImages\Job\DerivativeImages::class, $params);
-            $message = new Message(
-                'Creating derivative images in background (%sjob #%d%s)', // @translate
-                sprintf('<a href="%s">',
-                    htmlspecialchars($controller->url()->fromRoute('admin/id', ['controller' => 'job', 'id' => $job->getId()]))
-                ),
-                $job->getId(),
-                '</a>'
-            );
-            $message->setEscapeHtml(false);
-            $controller->messenger()->addSuccess($message);
+
+        if (!$params['process']) {
+            $message = 'No job launched: the checkbox to process re-creation of derivative images was not checked.'; // @translate
+            $controller->messenger()->addWarning($message);
+            return;
         }
+        unset($params['csrf']);
+        unset($params['process']);
+
+        $dispatcher = $services->get('Omeka\Job\Dispatcher');
+        $job = $dispatcher->dispatch(\DerivativeImages\Job\DerivativeImages::class, $params);
+        $message = new Message(
+            'Creating derivative images in background (%sjob #%d%s)', // @translate
+            sprintf('<a href="%s">',
+                htmlspecialchars($controller->url()->fromRoute('admin/id', ['controller' => 'job', 'id' => $job->getId()]))
+            ),
+            $job->getId(),
+            '</a>'
+        );
+        $message->setEscapeHtml(false);
+        $controller->messenger()->addSuccess($message);
     }
 }

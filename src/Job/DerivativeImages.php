@@ -15,33 +15,79 @@ class DerivativeImages extends AbstractJob
 
     public function perform()
     {
+        /**
+         * @var array $config
+         * @var \Omeka\Mvc\Controller\Plugin\Logger $logger
+         * @var \Omeka\Api\Manager $api
+         * @var \Omeka\File\TempFileFactory $tempFileFactory
+         * @var \Doctrine\ORM\EntityManager $entityManager
+         * @var \Doctrine\DBAL\Connection $connection
+         */
         $services = $this->getServiceLocator();
         $config = $services->get('Config');
         $logger = $services->get('Omeka\Logger');
         $api = $services->get('Omeka\ApiManager');
-        /** @var \Omeka\File\TempFileFactory $tempFileFactory */
         $tempFileFactory = $services->get('Omeka\File\TempFileFactory');
         // The api cannot update value "has_thumbnails", so use entity manager.
         $entityManager = $services->get('Omeka\EntityManager');
+        $connection = $entityManager->getConnection();
 
         $basePath = $config['file_store']['local']['base_path'] ?: (OMEKA_PATH . '/files');
 
         $types = array_keys($config['thumbnails']['types']);
 
-        // Media to skip via ingester.
-        $skipIngesters = [
-        ];
+        $mediaRepository = $entityManager->getRepository(\Omeka\Entity\Media::class);
 
-        // Media types to skip.
-        $skipMediaTypes = [
-        ];
+        $sql = 'SELECT COUNT(id) FROM media WHERE 1 = 1';
+        $criteria = [];
 
-        $totalMedias = $api->search('media', [])
+        $ingesters = $this->getArg('ingesters', []) ?: [];
+        if (in_array('', $ingesters)) {
+            $ingesters = [];
+        }
+        if ($ingesters) {
+            $list = array_map([$connection, 'quote'], $ingesters);
+            $sql .= ' AND ingester IN (' . implode(',', $list). ')';
+            $criteria['ingester'] = $ingesters;
+        }
+
+        $renderers = $this->getArg('renderers', []) ?: [];
+        if (in_array('', $renderers)) {
+            $renderers = [];
+        }
+        if ($renderers) {
+            $list = array_map([$connection, 'quote'], $renderers);
+            $sql .= ' AND renderer IN (' . implode(',', $list). ')';
+            $criteria['renderer'] = $renderers;
+        }
+
+        $mediaTypes = $this->getArg('media_types', []) ?: [];
+        if (in_array('', $mediaTypes)) {
+            $mediaTypes = [];
+        }
+        if ($mediaTypes) {
+            $list = array_map([$connection, 'quote'], $mediaTypes);
+            $sql .= ' AND media_type IN (' . implode(',', $list). ')';
+            $criteria['mediaType'] = $mediaTypes;
+        }
+
+        $stmt = $connection->query($sql);
+        $totalMedias = $stmt->fetchColumn();
+
+        $fullTotalMedias = $api->search('media', [])
             ->getTotalResults();
 
+        if (empty($totalMedias)) {
+            $logger->info(new Message(
+                'No media to process for creation of derivative files (on a total of %d medias). You may check your query.', // @translate
+                $fullTotalMedias
+            ));
+            return;
+        }
+
         $logger->info(new Message(
-            'Processing creation of derivative files of %d medias.', // @translate
-            $totalMedias
+            'Processing creation of derivative files of %d medias (on a total of %d medias).', // @translate
+            $totalMedias, $fullTotalMedias
         ));
 
         $offset = 0;
@@ -52,17 +98,8 @@ class DerivativeImages extends AbstractJob
             // Entity are used, because it's not possible to update the value
             // "has_thumbnails" via api.
             /** @var \Omeka\Entity\Media[] $medias */
-            $medias = $api
-                ->search(
-                    'media',
-                    [
-                        'limit' => self::SQL_LIMIT,
-                        'offset' => $offset,
-                    ],
-                    ['responseContent' => 'resource']
-                )
-                ->getContent();
-            if (empty($medias)) {
+            $medias = $mediaRepository->findBy($criteria, ['id' => 'ASC'], self::SQL_LIMIT, $offset);
+            if (!count($medias)) {
                 break;
             }
 
@@ -79,14 +116,6 @@ class DerivativeImages extends AbstractJob
                 $hasOriginal = $media->hasOriginal();
                 $hasThumbnails = $media->hasThumbnails();
                 if (!$hasOriginal) {
-                    continue;
-                }
-
-                if (in_array($media->getIngester(), $skipIngesters)) {
-                    continue;
-                }
-
-                if (in_array($media->getMediaType(), $skipMediaTypes)) {
                     continue;
                 }
 
