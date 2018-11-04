@@ -33,6 +33,7 @@
 namespace DerivativeImages;
 
 use DerivativeImages\Form\ConfigForm;
+use DerivativeImages\Job\DerivativeImages;
 use Omeka\Module\AbstractModule;
 use Omeka\Stdlib\Message;
 use Zend\Mvc\Controller\AbstractController;
@@ -57,17 +58,16 @@ class Module extends AbstractModule
     {
         $services = $this->getServiceLocator();
         $form = $services->get('FormElementManager')->get(ConfigForm::class);
-        $translator = $services->get('MvcTranslator');
         $form->init();
         $html = '<p>'
             . sprintf(
-                $translator->translate('Set your parameters in %sconfig/local.config.php%s, then check this box to recreate derivative thumbnails.'), // @translate'
+                $renderer->translate('Set your parameters in %sconfig/local.config.php%s, then check this box to recreate derivative thumbnails.'), // @translate'
                 '<code>', '</code>'
             )
             . '</p>';
         $html .= $renderer->formCollection($form);
         $html .= '<p>'
-            . $translator->translate('When the process is ended (check the job log), the module can be uninstalled.') // @translate'
+            . $renderer->translate('When the process is ended (check the job log), the module can be uninstalled.') // @translate'
             . '</p>';
         return $html;
     }
@@ -88,16 +88,17 @@ class Module extends AbstractModule
 
         $params = $form->getData();
 
-        if (!$params['process']) {
-            $message = 'No job launched: the checkbox to process re-creation of derivative images was not checked.'; // @translate
+        if (empty($params['process']) || $params['process'] !== $controller->translate('Process')) {
+            $message = 'No job launched.'; // @translate
             $controller->messenger()->addWarning($message);
             return;
         }
+
         unset($params['csrf']);
         unset($params['process']);
 
-        $dispatcher = $services->get('Omeka\Job\Dispatcher');
-        $job = $dispatcher->dispatch(\DerivativeImages\Job\DerivativeImages::class, $params);
+        $dispatcher = $services->get(\Omeka\Job\Dispatcher::class);
+        $job = $dispatcher->dispatch(DerivativeImages::class, $params);
         $message = new Message(
             'Creating derivative images in background (%sjob #%d%s)', // @translate
             sprintf('<a href="%s">',

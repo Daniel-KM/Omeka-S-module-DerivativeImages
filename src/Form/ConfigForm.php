@@ -67,9 +67,13 @@ class ConfigForm extends Form
 
         $this->add([
             'name' => 'process',
-            'type' => Element\Checkbox::class,
+            'type' => Element\Submit::class,
             'options' => [
-                'label' => 'Launch the process to create derivative images in the background', // @translate
+                'label' => 'Run in background', // @translate
+            ],
+            'attributes' => [
+                'id' => 'process',
+                'value' => 'Process', // @translate
             ],
         ]);
 

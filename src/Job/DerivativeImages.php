@@ -36,7 +36,7 @@ class DerivativeImages extends AbstractJob
 
         $types = array_keys($config['thumbnails']['types']);
 
-        $mediaRepository = $entityManager->getRepository(\Omeka\Entity\Media::class);
+        $repository = $entityManager->getRepository(\Omeka\Entity\Media::class);
 
         $sql = 'SELECT COUNT(id) FROM media WHERE 1 = 1';
         $criteria = [];
@@ -72,22 +72,21 @@ class DerivativeImages extends AbstractJob
         }
 
         $stmt = $connection->query($sql);
-        $totalMedias = $stmt->fetchColumn();
+        $totalToProcess = $stmt->fetchColumn();
 
-        $fullTotalMedias = $api->search('media', [])
-            ->getTotalResults();
+        $totalResources = $api->search('media')->getTotalResults();
 
-        if (empty($totalMedias)) {
+        if (empty($totalToProcess)) {
             $logger->info(new Message(
                 'No media to process for creation of derivative files (on a total of %d medias). You may check your query.', // @translate
-                $fullTotalMedias
+                $totalResources
             ));
             return;
         }
 
         $logger->info(new Message(
             'Processing creation of derivative files of %d medias (on a total of %d medias).', // @translate
-            $totalMedias, $fullTotalMedias
+            $totalToProcess, $totalResources
         ));
 
         $offset = 0;
@@ -98,7 +97,7 @@ class DerivativeImages extends AbstractJob
             // Entity are used, because it's not possible to update the value
             // "has_thumbnails" via api.
             /** @var \Omeka\Entity\Media[] $medias */
-            $medias = $mediaRepository->findBy($criteria, ['id' => 'ASC'], self::SQL_LIMIT, $offset);
+            $medias = $repository->findBy($criteria, ['id' => 'ASC'], self::SQL_LIMIT, $offset);
             if (!count($medias)) {
                 break;
             }
@@ -107,7 +106,7 @@ class DerivativeImages extends AbstractJob
                 if ($this->shouldStop()) {
                     $logger->warn(new Message(
                         'The job "Derivative Images" was stopped: %d/%d resources processed.', // @translate
-                        $offset + $key, $totalMedias
+                        $offset + $key, $totalToProcess
                     ));
                     break 2;
                 }
@@ -126,7 +125,7 @@ class DerivativeImages extends AbstractJob
                 if (!file_exists($sourcePath)) {
                     $logger->warn(new Message(
                         'Media #%d (%d/%d): the original file "%s" does not exist.', // @translate
-                        $media->getId(), $offset + $key + 1, $totalMedias, $filename
+                        $media->getId(), $offset + $key + 1, $totalToProcess, $filename
                     ));
                     continue;
                 }
@@ -134,7 +133,7 @@ class DerivativeImages extends AbstractJob
                 if (!is_readable($sourcePath)) {
                     $logger->warn(new Message(
                         'Media #%d (%d/%d): the original file "%s" is not readable.', // @translate
-                        $media->getId(), $offset + $key + 1, $totalMedias, $filename
+                        $media->getId(), $offset + $key + 1, $totalToProcess, $filename
                     ));
                     continue;
                 }
@@ -145,7 +144,7 @@ class DerivativeImages extends AbstractJob
                     if (file_exists($derivativePath) && !is_writeable($derivativePath)) {
                         $logger->warn(new Message(
                             'Media #%d (%d/%d): derivative file "%s" is not writeable (type "%s").', // @translate
-                            $media->getId(), $offset + $key + 1, $totalMedias, $filename, $type
+                            $media->getId(), $offset + $key + 1, $totalToProcess, $filename, $type
                         ));
                         continue 2;
                     }
@@ -155,7 +154,7 @@ class DerivativeImages extends AbstractJob
 
                 $logger->info(new Message(
                     'Media #%d (%d/%d): creating derivative files.', // @translate
-                    $media->getId(), $offset + $key + 1, $totalMedias
+                    $media->getId(), $offset + $key + 1, $totalToProcess
                 ));
 
                 $tempFile = $tempFileFactory->build();
@@ -173,13 +172,13 @@ class DerivativeImages extends AbstractJob
                     ++$totalSucceed;
                     $logger->info(new Message(
                         'Media #%d (%d/%d): derivative files created.', // @translate
-                        $media->getId(), $offset + $key + 1, $totalMedias
+                        $media->getId(), $offset + $key + 1, $totalToProcess
                     ));
                 } else {
                     ++$totalFailed;
                     $logger->notice(new Message(
                         'Media #%d (%d/%d): derivative files not created.', // @translate
-                        $media->getId(), $offset + $key + 1, $totalMedias
+                        $media->getId(), $offset + $key + 1, $totalToProcess
                     ));
                 }
             }
@@ -190,7 +189,7 @@ class DerivativeImages extends AbstractJob
 
         $logger->info(new Message(
             'End of the creation of derivative files: %d/%d processed, %d skipped, %d succeed, %d failed.', // @translate
-            $totalProcessed, $totalMedias, $totalMedias - $totalProcessed, $totalSucceed, $totalFailed
+            $totalProcessed, $totalToProcess, $totalToProcess - $totalProcessed, $totalSucceed, $totalFailed
         ));
     }
 }
