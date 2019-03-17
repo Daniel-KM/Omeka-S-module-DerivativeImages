@@ -11,7 +11,7 @@ class DerivativeImages extends AbstractJob
      *
      * @var integer
      */
-    const SQL_LIMIT = 20;
+    const SQL_LIMIT = 25;
 
     public function perform()
     {
@@ -182,9 +182,15 @@ class DerivativeImages extends AbstractJob
                         $media->getId(), $offset + $key + 1, $totalToProcess
                     ));
                 }
+
+                // Avoid memory issue.
+                unset($media);
             }
 
+            // Avoid memory issue.
+            unset($medias);
             $entityManager->clear();
+
             $offset += self::SQL_LIMIT;
         }
 
