@@ -61,13 +61,13 @@ class Module extends AbstractModule
         $form->init();
         $html = '<p>'
             . sprintf(
-                $renderer->translate('Set your parameters in %sconfig/local.config.php%s, then check this box to recreate derivative thumbnails.'), // @translate'
+                $renderer->translate('Set your parameters in %sconfig/local.config.php%s, then check this box to recreate derivative thumbnails.'), // @translate
                 '<code>', '</code>'
             )
             . '</p>';
         $html .= $renderer->formCollection($form);
         $html .= '<p>'
-            . $renderer->translate('When the process is ended (check the job log), the module can be uninstalled.') // @translate'
+            . $renderer->translate('When the process is ended (check the job log), the module can be uninstalled.') // @translate
             . '</p>';
         return $html;
     }

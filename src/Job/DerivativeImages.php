@@ -90,8 +90,9 @@ class DerivativeImages extends AbstractJob
         ));
 
         $offset = 0;
+        $key = 0;
         $totalProcessed = 0;
-        $totalSucceed= 0;
+        $totalSucceed = 0;
         $totalFailed = 0;
         while (true) {
             // Entity are used, because it's not possible to update the value
