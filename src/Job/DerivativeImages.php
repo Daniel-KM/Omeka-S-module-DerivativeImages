@@ -74,7 +74,7 @@ class DerivativeImages extends AbstractJob
         $stmt = $connection->query($sql);
         $totalToProcess = $stmt->fetchColumn();
 
-        $totalResources = $api->search('media')->getTotalResults();
+        $totalResources = $api->search('media', ['limit' => 1])->getTotalResults();
 
         if (empty($totalToProcess)) {
             $logger->info(new Message(
