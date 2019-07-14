@@ -258,7 +258,7 @@ class DerivativeImages extends AbstractJob
             : explode(' ', $clean($ids));
 
         // Skip empty ranges and ranges with multiple "-".
-        return array_values(array_filter($ids, function($v) {
+        return array_values(array_filter($ids, function ($v) {
             return !empty($v) && substr_count($v, '-') <= 1;
         }));
     }
