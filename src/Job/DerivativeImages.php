@@ -75,6 +75,8 @@ class DerivativeImages extends AbstractJob
         // Check only media with an original file.
         $criteria->andWhere($expr->eq('hasOriginal', 1));
 
+        $criteria->orderBy(['id' => 'ASC']);
+
         $collection = $repository->matching($criteria);
         $totalToProcess = $collection->count();
 
