@@ -46,10 +46,6 @@ class DerivativeImages extends AbstractJob
         // Always true expression to simplify process.
         $criteria->where($expr->gt('id', 0));
 
-        // TODO Manage creation of thumbnails for media without original (youtube…).
-        // Check only media with an original file.
-        $criteria->where($expr->eq('hasOriginal', 1));
-
         $ingesters = $this->getArg('ingesters', []);
         if ($ingesters && !in_array('', $ingesters)) {
             $criteria->andWhere($expr->in('ingester', $ingesters));
@@ -65,7 +61,19 @@ class DerivativeImages extends AbstractJob
             $criteria->andWhere($expr->in('mediaType', $mediaTypes));
         }
 
+        $mediaIds = $this->getArg('media_ids');
+        if ($mediaIds) {
+            $range = $this->exprRange('id', $mediaIds);
+            if ($range) {
+                $criteria->andWhere($expr->orX(...$range));
+            }
+        }
+
         $totalResources = $api->search('media', ['limit' => 1])->getTotalResults();
+
+        // TODO Manage creation of thumbnails for media without original (youtube…).
+        // Check only media with an original file.
+        $criteria->andWhere($expr->eq('hasOriginal', 1));
 
         $collection = $repository->matching($criteria);
         $totalToProcess = $collection->count();
@@ -189,5 +197,67 @@ class DerivativeImages extends AbstractJob
             'End of the creation of derivative files: %d/%d processed, %d skipped, %d succeed, %d failed.', // @translate
             $totalProcessed, $totalToProcess, $totalToProcess - $totalProcessed, $totalSucceed, $totalFailed
         ));
+    }
+
+    /**
+     * Create a doctrine expression for a range.
+     *
+     * @param string $column
+     * @param array|string $ids
+     * @return \Doctrine\Common\Collections\Expr\CompositeExpression|null
+     */
+    protected function exprRange($column, $ids)
+    {
+        $ranges = $this->rangeToArray($ids);
+        if (empty($ranges)) {
+            return [];
+        }
+
+        $conditions = [];
+
+        $expr = Criteria::create()->expr();
+        foreach ($ranges as $range) {
+            if (strpos($range, '-')) {
+                $from = strtok($range, '-');
+                $to = strtok('-');
+                if ($from && $to) {
+                    $conditions[] = $expr->andX($expr->gte($column, $from), $expr->lte($column, $to));
+                } elseif ($from) {
+                    $conditions[] = $expr->gte($column, $from);
+                } else {
+                    $conditions[] = $expr->lte($column, $to);
+                }
+            } else {
+                $conditions[] = $expr->eq($column, $range);
+            }
+        }
+
+        return $conditions;
+    }
+
+    /**
+     * Clean a list of ranges of ids.
+     *
+     * @param string|array $ids
+     * @return array
+     */
+    protected function rangeToArray($ids)
+    {
+        $clean = function ($str) {
+            $str = preg_replace('/[^0-9-]/', ' ', $str);
+            $str = preg_replace('/\s*-+\s*/', '-', $str);
+            $str = preg_replace('/-+/', '-', $str);
+            $str = preg_replace('/\s+/', ' ', $str);
+            return trim($str);
+        };
+
+        $ids = is_array($ids)
+            ? array_map($clean, $ids)
+            : explode(' ', $clean($ids));
+
+        // Skip empty ranges and ranges with multiple "-".
+        return array_values(array_filter($ids, function($v) {
+            return !empty($v) && substr_count($v, '-') <= 1;
+        }));
     }
 }

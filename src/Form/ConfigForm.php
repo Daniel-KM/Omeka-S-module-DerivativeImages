@@ -66,6 +66,18 @@ class ConfigForm extends Form
         ]);
 
         $this->add([
+            'name' => 'media_ids',
+            'type' => Element\Text::class,
+            'options' => [
+                'label' => 'Media ids', // @translate
+            ],
+            'attributes' => [
+                'id' => 'media_ids',
+                'placeholder' => '2-6 8 38-52 80-', // @ translate
+            ],
+        ]);
+
+        $this->add([
             'name' => 'process',
             'type' => Element\Submit::class,
             'options' => [
