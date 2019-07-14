@@ -35,8 +35,8 @@ When the process is ended (check the job log), the module can be uninstalled.
 TODO
 ----
 
-- Add options to select medias by type, all thumbnails or only missing ones, all
-  types of thumbnails or not.
+- Add options to select all thumbnails or only missing ones, all types of
+  thumbnails or not.
 - Manage creation of thumbnails for media without original (youtube…).
 
 
