@@ -13,7 +13,7 @@ the Roy Rosenzweig Center for History and New Media.
 Installation
 ------------
 
-Uncompress files and rename plugin folder `DerivativeImages`.
+Uncompress files and rename module folder `DerivativeImages`.
 
 See general end user documentation for [Installing a module] and follow the
 config instructions.
@@ -88,7 +88,7 @@ of the CeCILL license and that you accept its terms.
 Copyright
 ---------
 
-* Copyright Daniel Berthereau, 2018
+* Copyright Daniel Berthereau, 2018-2019
 
 
 [Derivative Images]: https://github.com/Daniel-KM/Omeka-S-module-DerivativeImages

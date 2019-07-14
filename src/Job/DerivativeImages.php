@@ -9,7 +9,7 @@ class DerivativeImages extends AbstractJob
     /**
      * Limit for the loop to avoid heavy sql requests.
      *
-     * @var integer
+     * @var int
      */
     const SQL_LIMIT = 25;
 
@@ -36,36 +36,34 @@ class DerivativeImages extends AbstractJob
 
         $types = array_keys($config['thumbnails']['types']);
 
+        // Prepare the list of medias.
+
         $repository = $entityManager->getRepository(\Omeka\Entity\Media::class);
 
         $sql = 'SELECT COUNT(id) FROM media WHERE 1 = 1';
         $criteria = [];
 
-        $ingesters = $this->getArg('ingesters', []) ?: [];
-        if (in_array('', $ingesters)) {
-            $ingesters = [];
-        }
-        if ($ingesters) {
+        // TODO Manage creation of thumbnails for media without original (youtube…).
+        // Check only media with an original file.
+        $sql .= ' AND has_original = 1';
+        $criteria['hasOriginal'] = 1;
+
+        $ingesters = $this->getArg('ingesters', []);
+        if ($ingesters && !in_array('', $ingesters)) {
             $list = array_map([$connection, 'quote'], $ingesters);
             $sql .= ' AND ingester IN (' . implode(',', $list). ')';
             $criteria['ingester'] = $ingesters;
         }
 
-        $renderers = $this->getArg('renderers', []) ?: [];
-        if (in_array('', $renderers)) {
-            $renderers = [];
-        }
-        if ($renderers) {
+        $renderers = $this->getArg('renderers', []);
+        if ($renderers && !in_array('', $renderers)) {
             $list = array_map([$connection, 'quote'], $renderers);
             $sql .= ' AND renderer IN (' . implode(',', $list). ')';
             $criteria['renderer'] = $renderers;
         }
 
-        $mediaTypes = $this->getArg('media_types', []) ?: [];
-        if (in_array('', $mediaTypes)) {
-            $mediaTypes = [];
-        }
-        if ($mediaTypes) {
+        $mediaTypes = $this->getArg('media_types', []);
+        if ($mediaTypes && !in_array('', $mediaTypes)) {
             $list = array_map([$connection, 'quote'], $mediaTypes);
             $sql .= ' AND media_type IN (' . implode(',', $list). ')';
             $criteria['mediaType'] = $mediaTypes;
@@ -89,6 +87,8 @@ class DerivativeImages extends AbstractJob
             $totalToProcess, $totalResources
         ));
 
+        // Do the process.
+
         $offset = 0;
         $key = 0;
         $totalProcessed = 0;
@@ -110,13 +110,6 @@ class DerivativeImages extends AbstractJob
                         $offset + $key, $totalToProcess
                     ));
                     break 2;
-                }
-
-                // TODO Manage creation of thumbnails for media without original (youtube…).
-                $hasOriginal = $media->hasOriginal();
-                $hasThumbnails = $media->hasThumbnails();
-                if (!$hasOriginal) {
-                    continue;
                 }
 
                 // Thumbnails are created only if the original file exists.
@@ -151,8 +144,6 @@ class DerivativeImages extends AbstractJob
                     }
                 }
 
-                ++$totalProcessed;
-
                 $logger->info(new Message(
                     'Media #%d (%d/%d): creating derivative files.', // @translate
                     $media->getId(), $offset + $key + 1, $totalToProcess
@@ -162,12 +153,15 @@ class DerivativeImages extends AbstractJob
                 $tempFile->setTempPath($sourcePath);
                 $tempFile->setStorageId($media->getStorageId());
 
+                $hasThumbnails = $media->hasThumbnails();
                 $result = $tempFile->storeThumbnails();
                 if ($hasThumbnails !== $result) {
                     $media->setHasThumbnails($result);
                     $entityManager->persist($media);
                     $entityManager->flush();
                 }
+
+                ++$totalProcessed;
 
                 if ($result) {
                     ++$totalSucceed;

@@ -61,13 +61,13 @@ class Module extends AbstractModule
         $form->init();
         $html = '<p>'
             . sprintf(
-                $renderer->translate('Set your parameters in %sconfig/local.config.php%s, then check this box to recreate derivative thumbnails.'), // @translate
+                $renderer->translate('Set your parameters (type, size…) in %sconfig/local.config.php%s, then fill this form to recreate derivative thumbnails.'), // @translate
                 '<code>', '</code>'
             )
             . '</p>';
         $html .= $renderer->formCollection($form);
         $html .= '<p>'
-            . $renderer->translate('When the process is ended (check the job log), the module can be uninstalled.') // @translate
+            . $renderer->translate('When the process is ended (check the job log), this module can be uninstalled.') // @translate
             . '</p>';
         return $html;
     }
@@ -96,6 +96,9 @@ class Module extends AbstractModule
 
         unset($params['csrf']);
         unset($params['process']);
+        $params['ingesters'] = $params['ingesters'] ?: [];
+        $params['renderers'] = $params['renderers'] ?: [];
+        $params['media_types'] = $params['media_types'] ?: [];
 
         $dispatcher = $services->get(\Omeka\Job\Dispatcher::class);
         $job = $dispatcher->dispatch(DerivativeImages::class, $params);

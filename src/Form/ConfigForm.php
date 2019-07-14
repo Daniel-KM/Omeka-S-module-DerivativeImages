@@ -26,7 +26,7 @@ class ConfigForm extends Form
                 'id' => 'ingesters',
                 'class' => 'chosen-select',
                 'multiple' => true,
-                'placehoder' => 'Select ingesters to process', // @ translate
+                'placeholder' => 'Select ingesters to process', // @ translate
                 'data-placeholder' => 'Select ingesters to process', // @ translate
             ],
         ]);
@@ -43,7 +43,7 @@ class ConfigForm extends Form
                 'id' => 'renderers',
                 'class' => 'chosen-select',
                 'multiple' => true,
-                'placehoder' => 'Select renderers to process', // @ translate
+                'placeholder' => 'Select renderers to process', // @ translate
                 'data-placeholder' => 'Select renderers to process', // @ translate
             ],
         ]);
@@ -60,7 +60,7 @@ class ConfigForm extends Form
                 'id' => 'media_types',
                 'class' => 'chosen-select',
                 'multiple' => true,
-                'placehoder' => 'Select media types to process', // @ translate
+                'placeholder' => 'Select media types to process', // @ translate
                 'data-placeholder' => 'Select media types to process', // @ translate
             ],
         ]);
