@@ -1,6 +1,7 @@
 <?php
 namespace DerivativeImages\Job;
 
+use Doctrine\Common\Collections\Criteria;
 use Omeka\Job\AbstractJob;
 use Omeka\Stdlib\Message;
 
@@ -39,40 +40,35 @@ class DerivativeImages extends AbstractJob
         // Prepare the list of medias.
 
         $repository = $entityManager->getRepository(\Omeka\Entity\Media::class);
+        $criteria = Criteria::create();
+        $expr = $criteria->expr();
 
-        $sql = 'SELECT COUNT(id) FROM media WHERE 1 = 1';
-        $criteria = [];
+        // Always true expression to simplify process.
+        $criteria->where($expr->gt('id', 0));
 
         // TODO Manage creation of thumbnails for media without original (youtube…).
         // Check only media with an original file.
-        $sql .= ' AND has_original = 1';
-        $criteria['hasOriginal'] = 1;
+        $criteria->where($expr->eq('hasOriginal', 1));
 
         $ingesters = $this->getArg('ingesters', []);
         if ($ingesters && !in_array('', $ingesters)) {
-            $list = array_map([$connection, 'quote'], $ingesters);
-            $sql .= ' AND ingester IN (' . implode(',', $list). ')';
-            $criteria['ingester'] = $ingesters;
+            $criteria->andWhere($expr->in('ingester', $ingesters));
         }
 
         $renderers = $this->getArg('renderers', []);
         if ($renderers && !in_array('', $renderers)) {
-            $list = array_map([$connection, 'quote'], $renderers);
-            $sql .= ' AND renderer IN (' . implode(',', $list). ')';
-            $criteria['renderer'] = $renderers;
+            $criteria->andWhere($expr->in('renderer', $renderers));
         }
 
         $mediaTypes = $this->getArg('media_types', []);
         if ($mediaTypes && !in_array('', $mediaTypes)) {
-            $list = array_map([$connection, 'quote'], $mediaTypes);
-            $sql .= ' AND media_type IN (' . implode(',', $list). ')';
-            $criteria['mediaType'] = $mediaTypes;
+            $criteria->andWhere($expr->in('mediaType', $mediaTypes));
         }
 
-        $stmt = $connection->query($sql);
-        $totalToProcess = $stmt->fetchColumn();
-
         $totalResources = $api->search('media', ['limit' => 1])->getTotalResults();
+
+        $collection = $repository->matching($criteria);
+        $totalToProcess = $collection->count();
 
         if (empty($totalToProcess)) {
             $logger->info(new Message(
@@ -94,15 +90,16 @@ class DerivativeImages extends AbstractJob
         $totalProcessed = 0;
         $totalSucceed = 0;
         $totalFailed = 0;
-        while (true) {
+        $count = 0;
+        while (++$count <= $totalToProcess) {
             // Entity are used, because it's not possible to update the value
             // "has_thumbnails" via api.
-            /** @var \Omeka\Entity\Media[] $medias */
-            $medias = $repository->findBy($criteria, ['id' => 'ASC'], self::SQL_LIMIT, $offset);
-            if (!count($medias)) {
-                break;
-            }
+            $criteria
+                ->setMaxResults(self::SQL_LIMIT)
+                ->setFirstResult($offset);
+            $medias = $repository->matching($criteria);
 
+            /** @var \Omeka\Entity\Media $media */
             foreach ($medias as $key => $media) {
                 if ($this->shouldStop()) {
                     $logger->warn(new Message(
