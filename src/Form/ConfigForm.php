@@ -133,7 +133,7 @@ class ConfigForm extends Form
      */
     protected function listMediaTypes()
     {
-        $sql = 'SELECT DISTINCT(media_type) FROM media ORDER BY media_type';
+        $sql = 'SELECT DISTINCT(media_type) FROM media WHERE media_type IS NOT NULL AND media_type != "" ORDER BY media_type';
         $stmt = $this->getConnection()->query($sql);
         $result = $stmt->fetchAll(\PDO::FETCH_COLUMN);
         return ['' => 'All media types'] // @translate
