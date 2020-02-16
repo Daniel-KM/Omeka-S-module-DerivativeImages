@@ -31,6 +31,16 @@ in the background.
 
 When the process is ended (check the job log), the module can be uninstalled.
 
+To create the image on the second page or any other next ones of pdf files,
+include this iin the main config/local.config.php of Omeka (see [#4]): 
+
+```php
+    'thumbnailer_options' => [
+        'imagemagick_dir' => null,
+        'page' => 1,
+    ],
+```
+
 
 TODO
 ----
@@ -96,6 +106,7 @@ Copyright
 [plugin Derivative Images]: https://omeka.org/classic/plugins/DerivativeImages/
 [Omeka Classic]: https://omeka.org/classic
 [Installing a module]: https://omeka.org/s/docs/user-manual/modules/#installing-modules
+[#4]: https://github.com/Daniel-KM/Omeka-S-module-DerivativeImages/issues/4
 [module issues]: https://github.com/Daniel-KM/Omeka-S-module-DerivativeImages/issues
 [CeCILL v2.1]: https://www.cecill.info/licences/Licence_CeCILL_V2.1-en.html
 [GNU/GPL]: https://www.gnu.org/licenses/gpl-3.0.html
