@@ -14,94 +14,91 @@ class ConfigForm extends Form
 
     public function init()
     {
-        $this->add([
-            'name' => 'ingesters',
-            'type' => Element\Select::class,
-            'options' => [
-                'label' => 'Ingesters to process', // @translate
-                'empty_option' => 'All ingesters', // @translate
-                'value_options' => $this->listIngesters(),
-            ],
-            'attributes' => [
-                'id' => 'ingesters',
-                'class' => 'chosen-select',
-                'multiple' => true,
-                'placeholder' => 'Select ingesters to process', // @ translate
-                'data-placeholder' => 'Select ingesters to process', // @ translate
-            ],
-        ]);
+        $this
+            ->add([
+                'name' => 'ingesters',
+                'type' => Element\Select::class,
+                'options' => [
+                    'label' => 'Ingesters to process', // @translate
+                    'empty_option' => 'All ingesters', // @translate
+                    'value_options' => $this->listIngesters(),
+                ],
+                'attributes' => [
+                    'id' => 'ingesters',
+                    'class' => 'chosen-select',
+                    'multiple' => true,
+                    'placeholder' => 'Select ingesters to process', // @ translate
+                    'data-placeholder' => 'Select ingesters to process', // @ translate
+                ],
+            ])
+            ->add([
+                'name' => 'renderers',
+                'type' => Element\Select::class,
+                'options' => [
+                    'label' => 'Renderers to process', // @translate
+                    'empty_option' => 'All renderers', // @translate
+                    'value_options' => $this->listRenderers(),
+                ],
+                'attributes' => [
+                    'id' => 'renderers',
+                    'class' => 'chosen-select',
+                    'multiple' => true,
+                    'placeholder' => 'Select renderers to process', // @ translate
+                    'data-placeholder' => 'Select renderers to process', // @ translate
+                ],
+            ])
+            ->add([
+                'name' => 'media_types',
+                'type' => Element\Select::class,
+                'options' => [
+                    'label' => 'Media types to process', // @translate
+                    'empty_option' => 'All media types', // @translate
+                    'value_options' => $this->listMediaTypes(),
+                ],
+                'attributes' => [
+                    'id' => 'media_types',
+                    'class' => 'chosen-select',
+                    'multiple' => true,
+                    'placeholder' => 'Select media types to process', // @ translate
+                    'data-placeholder' => 'Select media types to process', // @ translate
+                ],
+            ])
+            ->add([
+                'name' => 'media_ids',
+                'type' => Element\Text::class,
+                'options' => [
+                    'label' => 'Media ids', // @translate
+                ],
+                'attributes' => [
+                    'id' => 'media_ids',
+                    'placeholder' => '2-6 8 38-52 80-', // @ translate
+                ],
+            ])
+            ->add([
+                'name' => 'process',
+                'type' => Element\Submit::class,
+                'options' => [
+                    'label' => 'Run in background', // @translate
+                ],
+                'attributes' => [
+                    'id' => 'process',
+                    'value' => 'Process', // @translate
+                ],
+            ]);
 
-        $this->add([
-            'name' => 'renderers',
-            'type' => Element\Select::class,
-            'options' => [
-                'label' => 'Renderers to process', // @translate
-                'empty_option' => 'All renderers', // @translate
-                'value_options' => $this->listRenderers(),
-            ],
-            'attributes' => [
-                'id' => 'renderers',
-                'class' => 'chosen-select',
-                'multiple' => true,
-                'placeholder' => 'Select renderers to process', // @ translate
-                'data-placeholder' => 'Select renderers to process', // @ translate
-            ],
-        ]);
-
-        $this->add([
-            'name' => 'media_types',
-            'type' => Element\Select::class,
-            'options' => [
-                'label' => 'Media types to process', // @translate
-                'empty_option' => 'All media types', // @translate
-                'value_options' => $this->listMediaTypes(),
-            ],
-            'attributes' => [
-                'id' => 'media_types',
-                'class' => 'chosen-select',
-                'multiple' => true,
-                'placeholder' => 'Select media types to process', // @ translate
-                'data-placeholder' => 'Select media types to process', // @ translate
-            ],
-        ]);
-
-        $this->add([
-            'name' => 'media_ids',
-            'type' => Element\Text::class,
-            'options' => [
-                'label' => 'Media ids', // @translate
-            ],
-            'attributes' => [
-                'id' => 'media_ids',
-                'placeholder' => '2-6 8 38-52 80-', // @ translate
-            ],
-        ]);
-
-        $this->add([
-            'name' => 'process',
-            'type' => Element\Submit::class,
-            'options' => [
-                'label' => 'Run in background', // @translate
-            ],
-            'attributes' => [
-                'id' => 'process',
-                'value' => 'Process', // @translate
-            ],
-        ]);
-
-        $inputFilter = $this->getInputFilter();
-        $inputFilter->add([
-            'name' => 'ingesters',
-            'required' => false,
-        ]);
-        $inputFilter->add([
-            'name' => 'renderers',
-            'required' => false,
-        ]);
-        $inputFilter->add([
-            'name' => 'media_types',
-            'required' => false,
-        ]);
+        $this->getInputFilter()
+            ->add([
+                'name' => 'ingesters',
+                'required' => false,
+            ])
+            ->add([
+                'name' => 'renderers',
+                'required' => false,
+            ])
+            ->add([
+                'name' => 'media_types',
+                'required' => false,
+            ]);
     }
 
     /**
