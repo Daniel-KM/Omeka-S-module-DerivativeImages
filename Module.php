@@ -96,6 +96,7 @@ class Module extends AbstractModule
 
         unset($params['csrf']);
         unset($params['process']);
+        $params['item_sets'] = $params['item_sets'] ?: [];
         $params['ingesters'] = $params['ingesters'] ?: [];
         $params['renderers'] = $params['renderers'] ?: [];
         $params['media_types'] = $params['media_types'] ?: [];

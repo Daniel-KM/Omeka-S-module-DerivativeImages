@@ -2,6 +2,7 @@
 namespace DerivativeImages\Form;
 
 use Doctrine\DBAL\Connection;
+use Omeka\Form\Element\ItemSetSelect;
 use Zend\Form\Element;
 use Zend\Form\Form;
 
@@ -15,6 +16,20 @@ class ConfigForm extends Form
     public function init()
     {
         $this
+            ->add([
+                'name' => 'item_sets',
+                'type' => ItemSetSelect::class,
+                'options' => [
+                    'label' => 'Item sets', // @translate
+                ],
+                'attributes' => [
+                    'id' => 'item_sets',
+                    'class' => 'chosen-select',
+                    'multiple' => true,
+                    'required' => false,
+                    'data-placeholder' => 'Select one or more item sets…', // @translate
+                ],
+            ])
             ->add([
                 'name' => 'ingesters',
                 'type' => Element\Select::class,
@@ -87,6 +102,10 @@ class ConfigForm extends Form
             ]);
 
         $this->getInputFilter()
+            ->add([
+                'name' => 'item_sets',
+                'required' => false,
+            ])
             ->add([
                 'name' => 'ingesters',
                 'required' => false,

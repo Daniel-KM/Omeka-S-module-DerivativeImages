@@ -50,6 +50,21 @@ class DerivativeImages extends AbstractJob
         // Always true expression to simplify process.
         $criteria->where($expr->gt('id', 0));
 
+        $itemSets = $this->getArg('item_sets', []);
+        if ($itemSets) {
+            // TODO Include dql as a subquery.
+            $dql = <<<DQL
+SELECT item.id
+FROM Omeka\Entity\Item item
+JOIN item.itemSets item_set
+WHERE item_set.id IN (:item_set_ids)
+DQL;
+            $query = $entityManager->createQuery($dql);
+            $query->setParameter('item_set_ids', $itemSets, \Doctrine\DBAL\Connection::PARAM_INT_ARRAY);
+            $itemIds = array_column($query->getArrayResult(), 'id');
+            $criteria->andWhere($expr->in('item', $itemIds));
+        }
+
         $ingesters = $this->getArg('ingesters', []);
         if ($ingesters && !in_array('', $ingesters)) {
             $criteria->andWhere($expr->in('ingester', $ingesters));
@@ -104,7 +119,8 @@ class DerivativeImages extends AbstractJob
         $totalProcessed = 0;
         $totalSucceed = 0;
         $totalFailed = 0;
-        while (true) {
+        $count = 0;
+        while (++$count <= $totalToProcess) {
             // Entity are used, because it's not possible to update the value
             // "has_thumbnails" via api.
             $criteria
@@ -153,6 +169,7 @@ class DerivativeImages extends AbstractJob
                             'Media #%d (%d/%d): derivative file "%s" is not writeable (type "%s").', // @translate
                             $media->getId(), $offset + $key + 1, $totalToProcess, $filename, $type
                         ));
+                        $offset += self::SQL_LIMIT;
                         continue 2;
                     }
                 }
