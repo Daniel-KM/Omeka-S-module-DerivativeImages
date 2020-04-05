@@ -65,6 +65,9 @@ class Module extends AbstractModule
                 '<code>', '</code>'
             )
             . '</p>';
+        $html .= '<p>'
+            . $renderer->translate('Use module Bulk Check to find missing files and to remove dead files.') // @translate
+            . '</p>';
         $html .= $renderer->formCollection($form);
         $html .= '<p>'
             . $renderer->translate('When the process is ended (check the job log), this module can be uninstalled.') // @translate

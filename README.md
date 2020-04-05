@@ -1,5 +1,8 @@
-Derivative Images (module for Omeka S)
+Derivative Images (module for Omeka S) (archived)
 ======================================
+
+IMPORTANT: This module is now integrated in module [Bulk Check] and won‘t be
+updated any more.
 
 [Derivative Images] is a module for [Omeka S] that allows to recreate all
 derivative files from the original media, if they are still available. It is
@@ -32,7 +35,7 @@ in the background.
 When the process is ended (check the job log), the module can be uninstalled.
 
 To create the image on the second page or any other next ones of pdf files,
-include this iin the main config/local.config.php of Omeka (see [#4]): 
+include this in the main config/local.config.php of Omeka (see [#4]):
 
 ```php
     'thumbnailer_options' => [
@@ -40,6 +43,9 @@ include this iin the main config/local.config.php of Omeka (see [#4]):
         'page' => 1,
     ],
 ```
+
+You can find missing derivative files and files that don't exist in database
+with the module [Bulk Check].
 
 
 TODO
@@ -98,13 +104,14 @@ of the CeCILL license and that you accept its terms.
 Copyright
 ---------
 
-* Copyright Daniel Berthereau, 2018-2019
+* Copyright Daniel Berthereau, 2018-2020
 
 
 [Derivative Images]: https://github.com/Daniel-KM/Omeka-S-module-DerivativeImages
 [Omeka S]: https://omeka.org/s
 [plugin Derivative Images]: https://omeka.org/classic/plugins/DerivativeImages/
 [Omeka Classic]: https://omeka.org/classic
+[Bulk Check]: https://github.com/Daniel-KM/Omeka-S-module-BulkCheck
 [Installing a module]: https://omeka.org/s/docs/user-manual/modules/#installing-modules
 [#4]: https://github.com/Daniel-KM/Omeka-S-module-DerivativeImages/issues/4
 [module issues]: https://github.com/Daniel-KM/Omeka-S-module-DerivativeImages/issues
