@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-10-28 00:00+0100\n"
+"POT-Creation-Date: 2020-03-30 00:00+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -75,57 +75,58 @@ msgstr ""
 msgid "Run in background"
 msgstr ""
 
-#: src/Job/DerivativeImages.php:85
+#: src/Job/DerivativeImages.php:89
 #, php-format
 msgid ""
 "No media to process for creation of derivative files (on a total of %d "
 "medias). You may check your query."
 msgstr ""
 
-#: src/Job/DerivativeImages.php:92
+#: src/Job/DerivativeImages.php:96
 #, php-format
 msgid ""
 "Processing creation of derivative files of %d medias (on a total of %d "
 "medias)."
 msgstr ""
 
-#: src/Job/DerivativeImages.php:116
+#: src/Job/DerivativeImages.php:120
 #, php-format
-msgid "The job \"Derivative Images\" was stopped: %d/%d resources processed."
+msgid ""
+"The job \"Derivative Images\" was stopped: %1$d/%2$d resources processed."
 msgstr ""
 
-#: src/Job/DerivativeImages.php:128
+#: src/Job/DerivativeImages.php:132
 #, php-format
 msgid "Media #%d (%d/%d): the original file \"%s\" does not exist."
 msgstr ""
 
-#: src/Job/DerivativeImages.php:136
+#: src/Job/DerivativeImages.php:140
 #, php-format
 msgid "Media #%d (%d/%d): the original file \"%s\" is not readable."
 msgstr ""
 
-#: src/Job/DerivativeImages.php:147
+#: src/Job/DerivativeImages.php:151
 #, php-format
 msgid ""
 "Media #%d (%d/%d): derivative file \"%s\" is not writeable (type \"%s\")."
 msgstr ""
 
-#: src/Job/DerivativeImages.php:155
+#: src/Job/DerivativeImages.php:159
 #, php-format
 msgid "Media #%d (%d/%d): creating derivative files."
 msgstr ""
 
-#: src/Job/DerivativeImages.php:176
+#: src/Job/DerivativeImages.php:180
 #, php-format
 msgid "Media #%d (%d/%d): derivative files created."
 msgstr ""
 
-#: src/Job/DerivativeImages.php:182
+#: src/Job/DerivativeImages.php:186
 #, php-format
 msgid "Media #%d (%d/%d): derivative files not created."
 msgstr ""
 
-#: src/Job/DerivativeImages.php:199
+#: src/Job/DerivativeImages.php:203
 #, php-format
 msgid ""
 "End of the creation of derivative files: %d/%d processed, %d skipped, %d "

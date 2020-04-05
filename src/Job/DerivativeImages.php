@@ -117,7 +117,7 @@ class DerivativeImages extends AbstractJob
             foreach ($medias as $key => $media) {
                 if ($this->shouldStop()) {
                     $logger->warn(new Message(
-                        'The job "Derivative Images" was stopped: %d/%d resources processed.', // @translate
+                        'The job "Derivative Images" was stopped: %1$d/%2$d resources processed.', // @translate
                         $offset + $key, $totalToProcess
                     ));
                     break 2;

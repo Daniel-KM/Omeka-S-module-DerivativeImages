@@ -91,7 +91,7 @@ class Module extends AbstractModule
         if (empty($params['process']) || $params['process'] !== $controller->translate('Process')) {
             $message = 'No job launched.'; // @translate
             $controller->messenger()->addWarning($message);
-            return;
+            return true;
         }
 
         unset($params['csrf']);
@@ -112,5 +112,6 @@ class Module extends AbstractModule
         );
         $message->setEscapeHtml(false);
         $controller->messenger()->addSuccess($message);
+        return true;
     }
 }
