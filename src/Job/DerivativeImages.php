@@ -104,14 +104,16 @@ class DerivativeImages extends AbstractJob
         $totalProcessed = 0;
         $totalSucceed = 0;
         $totalFailed = 0;
-        $count = 0;
-        while (++$count <= $totalToProcess) {
+        while (true) {
             // Entity are used, because it's not possible to update the value
             // "has_thumbnails" via api.
             $criteria
                 ->setMaxResults(self::SQL_LIMIT)
                 ->setFirstResult($offset);
             $medias = $repository->matching($criteria);
+            if (!count($medias)) {
+                break;
+            }
 
             /** @var \Omeka\Entity\Media $media */
             foreach ($medias as $key => $media) {
