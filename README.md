@@ -1,7 +1,7 @@
 Derivative Images (module for Omeka S) (archived)
 ======================================
 
-IMPORTANT: This module is now integrated in module [Bulk Check] and won‘t be
+IMPORTANT: This module is now integrated in module [Bulk Check] and won’t be
 updated any more.
 
 [Derivative Images] is a module for [Omeka S] that allows to recreate all
@@ -74,7 +74,7 @@ See online issues on the [module issues] page.
 License
 -------
 
-This module is published under the [CeCILL v2.1] licence, compatible with
+This module is published under the [CeCILL v2.1] license, compatible with
 [GNU/GPL] and approved by [FSF] and [OSI].
 
 This software is governed by the CeCILL license under French law and abiding by
