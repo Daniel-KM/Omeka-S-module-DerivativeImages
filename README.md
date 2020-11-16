@@ -1,8 +1,8 @@
 Derivative Images (module for Omeka S) (archived)
 ======================================
 
-IMPORTANT: This module is now integrated in module [Bulk Check] and won’t be
-updated any more.
+> **IMPORTANT**: This module is now integrated in module [Bulk Check] and won’t
+> be updated any more.
 
 [Derivative Images] is a module for [Omeka S] that allows to recreate all
 derivative files from the original media, if they are still available. It is
