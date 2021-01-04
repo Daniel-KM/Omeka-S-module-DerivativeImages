@@ -36,8 +36,8 @@ use DerivativeImages\Form\ConfigForm;
 use DerivativeImages\Job\DerivativeImages;
 use Omeka\Module\AbstractModule;
 use Omeka\Stdlib\Message;
-use Zend\Mvc\Controller\AbstractController;
-use Zend\View\Renderer\PhpRenderer;
+use Laminas\Mvc\Controller\AbstractController;
+use Laminas\View\Renderer\PhpRenderer;
 
 /**
  * Derivative Images

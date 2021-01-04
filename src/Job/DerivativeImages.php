@@ -34,7 +34,7 @@ class DerivativeImages extends AbstractJob
         $connection = $entityManager->getConnection();
 
         // The reference id is the job id for now.
-        $referenceIdProcessor = new \Zend\Log\Processor\ReferenceId();
+        $referenceIdProcessor = new \Laminas\Log\Processor\ReferenceId();
         $referenceIdProcessor->setReferenceId('derivative/images/job_' . $this->job->getId());
 
         $basePath = $config['file_store']['local']['base_path'] ?: (OMEKA_PATH . '/files');
