@@ -9,9 +9,9 @@
             "email": "Daniel.packagist@Berthereau.net"
         }
     ],
-    "homepage": "https://github.com/Daniel-KM/Omeka-S-module-DerivativeImages",
+    "homepage": "https://gitlab.com/Daniel-KM/Omeka-S-module-DerivativeImages",
     "support": {
-        "issues": "https://github.com/Daniel-KM/Omeka-S-module-DerivativeImages/issues",
+        "issues": "https://gitlab.com/Daniel-KM/Omeka-S-module-DerivativeImages/-/issues",
         "forum": "https://forum.omeka.org/"
     },
     "keywords": [

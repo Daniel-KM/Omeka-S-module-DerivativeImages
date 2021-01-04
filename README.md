@@ -111,17 +111,17 @@ Copyright
 * Copyright Daniel Berthereau, 2018-2020
 
 
-[Derivative Images]: https://github.com/Daniel-KM/Omeka-S-module-DerivativeImages
+[Derivative Images]: https://gitlab.com/Daniel-KM/Omeka-S-module-DerivativeImages
 [Omeka S]: https://omeka.org/s
 [plugin Derivative Images]: https://omeka.org/classic/plugins/DerivativeImages/
 [Omeka Classic]: https://omeka.org/classic
-[Bulk Check]: https://github.com/Daniel-KM/Omeka-S-module-BulkCheck
+[Bulk Check]: https://gitlab.com/Daniel-KM/Omeka-S-module-BulkCheck
 [Installing a module]: https://omeka.org/s/docs/user-manual/modules/#installing-modules
-[#4]: https://github.com/Daniel-KM/Omeka-S-module-DerivativeImages/issues/4
-[module issues]: https://github.com/Daniel-KM/Omeka-S-module-DerivativeImages/issues
+[#4]: https://gitlab.com/Daniel-KM/Omeka-S-module-DerivativeImages/-/issues/4
+[module issues]: https://gitlab.com/Daniel-KM/Omeka-S-module-DerivativeImages/-/issues
 [CeCILL v2.1]: https://www.cecill.info/licences/Licence_CeCILL_V2.1-en.html
 [GNU/GPL]: https://www.gnu.org/licenses/gpl-3.0.html
 [FSF]: https://www.fsf.org
 [OSI]: http://opensource.org
 [GitLab]: https://gitlab.com/Daniel-KM
-[Daniel-KM]: https://github.com/Daniel-KM "Daniel Berthereau"
+[Daniel-KM]: https://gitlab.com/Daniel-KM "Daniel Berthereau"
