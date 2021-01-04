@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 namespace DerivativeImages\Job;
 
 use Doctrine\Common\Collections\Criteria;
@@ -14,7 +14,7 @@ class DerivativeImages extends AbstractJob
      */
     const SQL_LIMIT = 25;
 
-    public function perform()
+    public function perform(): void
     {
         /**
          * @var array $config

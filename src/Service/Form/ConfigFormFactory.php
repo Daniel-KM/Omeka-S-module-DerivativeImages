@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 namespace DerivativeImages\Service\Form;
 
 use DerivativeImages\Form\ConfigForm;

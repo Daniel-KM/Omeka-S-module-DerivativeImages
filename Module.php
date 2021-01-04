@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /*
  * Derivative Images
  *
@@ -34,10 +34,10 @@ namespace DerivativeImages;
 
 use DerivativeImages\Form\ConfigForm;
 use DerivativeImages\Job\DerivativeImages;
-use Omeka\Module\AbstractModule;
-use Omeka\Stdlib\Message;
 use Laminas\Mvc\Controller\AbstractController;
 use Laminas\View\Renderer\PhpRenderer;
+use Omeka\Module\AbstractModule;
+use Omeka\Stdlib\Message;
 
 /**
  * Derivative Images
