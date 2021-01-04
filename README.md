@@ -1,6 +1,10 @@
 Derivative Images (module for Omeka S) (archived)
 ======================================
 
+> __New versions of this module and support for Omeka S version 3.0 and above
+> are available on [GitLab], which seems to respect users and privacy better
+> than the previous repository.__
+
 > **IMPORTANT**: This module is now integrated in module [Bulk Check] and won’t
 > be updated any more.
 
@@ -119,4 +123,5 @@ Copyright
 [GNU/GPL]: https://www.gnu.org/licenses/gpl-3.0.html
 [FSF]: https://www.fsf.org
 [OSI]: http://opensource.org
+[GitLab]: https://gitlab.com/Daniel-KM
 [Daniel-KM]: https://github.com/Daniel-KM "Daniel Berthereau"
