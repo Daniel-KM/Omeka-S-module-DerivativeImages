@@ -125,9 +125,8 @@ class ConfigForm extends Form
      */
     protected function listIngesters()
     {
-        $sql = 'SELECT DISTINCT(ingester) FROM media ORDER BY ingester';
-        $stmt = $this->getConnection()->query($sql);
-        $result = $stmt->fetchAll(\PDO::FETCH_COLUMN);
+        $sql = 'SELECT DISTINCT(ingester) FROM media ORDER BY ingester ASC';
+        $result = $this->getConnection()->query($sql)->fetchAll(\PDO::FETCH_COLUMN);
         return ['' => 'All ingesters'] // @translate
             + array_combine($result, $result);
     }
@@ -137,9 +136,8 @@ class ConfigForm extends Form
      */
     protected function listRenderers()
     {
-        $sql = 'SELECT DISTINCT(renderer) FROM media ORDER BY renderer';
-        $stmt = $this->getConnection()->query($sql);
-        $result = $stmt->fetchAll(\PDO::FETCH_COLUMN);
+        $sql = 'SELECT DISTINCT(renderer) FROM media ORDER BY renderer ASC';
+        $result = $this->getConnection()->query($sql)->fetchAll(\PDO::FETCH_COLUMN);
         return ['' => 'All renderers'] // @translate
             + array_combine($result, $result);
     }
@@ -149,9 +147,8 @@ class ConfigForm extends Form
      */
     protected function listMediaTypes()
     {
-        $sql = 'SELECT DISTINCT(media_type) FROM media WHERE media_type IS NOT NULL AND media_type != "" ORDER BY media_type';
-        $stmt = $this->getConnection()->query($sql);
-        $result = $stmt->fetchAll(\PDO::FETCH_COLUMN);
+        $sql = 'SELECT DISTINCT(media_type) FROM media WHERE media_type IS NOT NULL AND media_type != "" ORDER BY media_type ASC';
+        $result = $this->getConnection()->query($sql)->fetchAll(\PDO::FETCH_COLUMN);
         return ['' => 'All media types'] // @translate
             + array_combine($result, $result);
     }
