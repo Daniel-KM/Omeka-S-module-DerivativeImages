@@ -5,8 +5,9 @@ Derivative Images (module for Omeka S) (archived)
 > are available on [GitLab], which seems to respect users and privacy better
 > than the previous repository.__
 
-> **IMPORTANT**: This module is now integrated in module [Bulk Check] and won’t
-> be updated any more.
+> **IMPORTANT**: This module is now integrated in modules [Easy Admin]
+> (recreation of standard derivative thumbnails) and [Derivative Media]
+> (creation of optimized files) and won’t be updated any more.
 
 [Derivative Images] is a module for [Omeka S] that allows to recreate all
 derivative files from the original media, if they are still available. It is
@@ -22,7 +23,7 @@ Installation
 
 Uncompress files and rename module folder `DerivativeImages`.
 
-See general end user documentation for [Installing a module] and follow the
+See general end user documentation for [installing a module] and follow the
 config instructions.
 
 
@@ -108,15 +109,16 @@ of the CeCILL license and that you accept its terms.
 Copyright
 ---------
 
-* Copyright Daniel Berthereau, 2018-2020
+* Copyright Daniel Berthereau, 2018-2023
 
 
 [Derivative Images]: https://gitlab.com/Daniel-KM/Omeka-S-module-DerivativeImages
 [Omeka S]: https://omeka.org/s
 [plugin Derivative Images]: https://omeka.org/classic/plugins/DerivativeImages/
 [Omeka Classic]: https://omeka.org/classic
-[Bulk Check]: https://gitlab.com/Daniel-KM/Omeka-S-module-BulkCheck
-[Installing a module]: https://omeka.org/s/docs/user-manual/modules/#installing-modules
+[Easy Admin]: https://gitlab.com/Daniel-KM/Omeka-S-module-EasyAdmin
+[Derivative Media]: https://gitlab.com/Daniel-KM/Omeka-S-module-DerivativeMedia
+[installing a module]: https://omeka.org/s/docs/user-manual/modules/#installing-modules
 [#4]: https://gitlab.com/Daniel-KM/Omeka-S-module-DerivativeImages/-/issues/4
 [module issues]: https://gitlab.com/Daniel-KM/Omeka-S-module-DerivativeImages/-/issues
 [CeCILL v2.1]: https://www.cecill.info/licences/Licence_CeCILL_V2.1-en.html
