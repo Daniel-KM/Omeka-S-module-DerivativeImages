@@ -1,4 +1,5 @@
 <?php declare(strict_types=1);
+
 namespace DerivativeImages\Job;
 
 use Doctrine\Common\Collections\Criteria;
@@ -61,7 +62,7 @@ WHERE item_set.id IN (:item_set_ids)
 DQL;
             $query = $entityManager->createQuery($dql);
             $query->setParameter('item_set_ids', $itemSets, \Doctrine\DBAL\Connection::PARAM_INT_ARRAY);
-            $itemIds = array_column($query->getArrayResult(), 'id');
+            $itemIds = array_map('intval', array_column($query->getArrayResult(), 'id'));
             $criteria->andWhere($expr->in('item', $itemIds));
         }
 
@@ -88,7 +89,7 @@ DQL;
             }
         }
 
-        $totalResources = $api->search('media', ['limit' => 1])->getTotalResults();
+        $totalResources = $api->search('media', ['limit' => 0])->getTotalResults();
 
         // TODO Manage creation of thumbnails for media without original (youtube…).
         // Check only media with an original file.

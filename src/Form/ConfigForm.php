@@ -153,18 +153,13 @@ class ConfigForm extends Form
             + array_combine($result, $result);
     }
 
-    /**
-     * @param Connection $connection
-     */
-    public function setConnection(Connection $connection): void
+    public function setConnection(Connection $connection): self
     {
         $this->connection = $connection;
+        return $this;
     }
 
-    /**
-     * @return \Doctrine\DBAL\Connection
-     */
-    public function getConnection()
+    public function getConnection(): Connection
     {
         return $this->connection;
     }
