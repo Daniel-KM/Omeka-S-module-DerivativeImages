@@ -100,17 +100,17 @@ DQL;
         $totalToProcess = $collection->count();
 
         if (empty($totalToProcess)) {
-            $logger->info(new Message(
-                'No media to process for creation of derivative files (on a total of %d medias). You may check your query.', // @translate
-                $totalResources
-            ));
+            $logger->info(
+                'No media to process for creation of derivative files (on a total of {total} medias). You may check your query.', // @translate
+                ['total' => $totalResources]
+            );
             return;
         }
 
-        $logger->info(new Message(
-            'Processing creation of derivative files of %d medias (on a total of %d medias).', // @translate
-            $totalToProcess, $totalResources
-        ));
+        $logger->info(
+            'Processing creation of derivative files of {count} medias (on a total of {total} medias).', // @translate
+            ['count' => $totalToProcess, 'total' => $totalResources]
+        );
 
         // Do the process.
 
@@ -134,10 +134,11 @@ DQL;
             /** @var \Omeka\Entity\Media $media */
             foreach ($medias as $key => $media) {
                 if ($this->shouldStop()) {
-                    $logger->warn(new Message(
-                        'The job "Derivative Images" was stopped: %1$d/%2$d resources processed.', // @translate
+                    $logger->warn(
+                        'The job "Derivative Images" was stopped: {count}/{total} resources processed.', // @translate
                         $offset + $key, $totalToProcess
-                    ));
+                        ['count' => $offset + $key + 1, 'total' => $totalToProcess]
+                    );
                     break 2;
                 }
 
@@ -146,18 +147,18 @@ DQL;
                 $sourcePath = $basePath . '/original/' . $filename;
 
                 if (!file_exists($sourcePath)) {
-                    $logger->warn(new Message(
-                        'Media #%d (%d/%d): the original file "%s" does not exist.', // @translate
-                        $media->getId(), $offset + $key + 1, $totalToProcess, $filename
-                    ));
+                    $logger->warn(
+                        'Media #{media_id} ({count}/{total}): the original file "{filename}" does not exist.', // @translate
+                        [$media->getId(), 'count' => $offset + $key + 1, 'total' => $totalToProcess, 'filename' => $filename]
+                    );
                     continue;
                 }
 
                 if (!is_readable($sourcePath)) {
-                    $logger->warn(new Message(
-                        'Media #%d (%d/%d): the original file "%s" is not readable.', // @translate
-                        $media->getId(), $offset + $key + 1, $totalToProcess, $filename
-                    ));
+                    $logger->warn(
+                        'Media #{media_id} ({count}/{total}): the original file "{filename}" is not readable.', // @translate
+                        [$media->getId(), 'count' => $offset + $key + 1, 'total' => $totalToProcess, 'filename' => $filename]
+                    );
                     continue;
                 }
 
@@ -165,19 +166,19 @@ DQL;
                 foreach ($types as $type) {
                     $derivativePath = $basePath . '/' . $type . '/' . $filename;
                     if (file_exists($derivativePath) && !is_writeable($derivativePath)) {
-                        $logger->warn(new Message(
-                            'Media #%d (%d/%d): derivative file "%s" is not writeable (type "%s").', // @translate
-                            $media->getId(), $offset + $key + 1, $totalToProcess, $filename, $type
-                        ));
+                        $logger->warn(
+                            'Media #{media_id} ({count}/{total}): derivative file "{filename}" is not writeable (type "{type}").', // @translate
+                            ['media_id' => $media->getId(), 'count' => $offset + $key + 1, 'total' => $totalToProcess, 'filename' => $filename, 'type' => $type]
+                        );
                         $offset += self::SQL_LIMIT;
                         continue 2;
                     }
                 }
 
-                $logger->info(new Message(
-                    'Media #%d (%d/%d): creating derivative files.', // @translate
-                    $media->getId(), $offset + $key + 1, $totalToProcess
-                ));
+                $logger->info(
+                    'Media #{media_id} ({count}/{total}): creating derivative files.', // @translate
+                    [$media->getId(), 'count' => $offset + $key + 1, 'total' => $totalToProcess]
+                );
 
                 $tempFile = $tempFileFactory->build();
                 $tempFile->setTempPath($sourcePath);
@@ -195,16 +196,16 @@ DQL;
 
                 if ($result) {
                     ++$totalSucceed;
-                    $logger->info(new Message(
-                        'Media #%d (%d/%d): derivative files created.', // @translate
-                        $media->getId(), $offset + $key + 1, $totalToProcess
-                    ));
+                    $logger->info(
+                        'Media #{media_id} ({count}/{total}): derivative files created.', // @translate
+                        [$media->getId(), 'count' => $offset + $key + 1, 'total' => $totalToProcess]
+                    );
                 } else {
                     ++$totalFailed;
-                    $logger->notice(new Message(
-                        'Media #%d (%d/%d): derivative files not created.', // @translate
-                        $media->getId(), $offset + $key + 1, $totalToProcess
-                    ));
+                    $logger->notice(
+                        'Media #{media_id} ({count}/{total}): derivative files not created.', // @translate
+                        [$media->getId(), 'count' => $offset + $key + 1, 'total' => $totalToProcess]
+                    );
                 }
 
                 // Avoid memory issue.
@@ -218,10 +219,10 @@ DQL;
             $offset += self::SQL_LIMIT;
         }
 
-        $logger->info(new Message(
-            'End of the creation of derivative files: %d/%d processed, %d skipped, %d succeed, %d failed.', // @translate
-            $totalProcessed, $totalToProcess, $totalToProcess - $totalProcessed, $totalSucceed, $totalFailed
-        ));
+        $logger->info(
+            'End of the creation of derivative files: {count}/{total} processed, {skipped} skipped, {succeed} succeed, {failed} failed.', // @translate
+            ['count' => $totalProcessed, 'total' => $totalToProcess, 'skipped' => $totalToProcess - $totalProcessed, 'succeed' => $totalSucceed, 'failed' => $totalFailed]
+        );
     }
 
     /**
